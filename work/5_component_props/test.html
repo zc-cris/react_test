@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test props</title>
+</head>
+<body>
+<div id="test"></div>
+<div id="test2"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+
+<script type="text/babel">
+
+    /*需求：
+    * 1. 动态显示传入的参数的数据
+    * 2. 对参数的数据进行默认值设置
+    * 3. 对参数的数据类型做出限制
+    * 3. 对参数的数据是否必要做出限制
+    * */
+    //1. 定义组件（函数的形式）
+    /*    function Person(props) {
+            return (
+            <ul>
+                <li>{props.name}</li>
+                <li>{props.age}</li>
+                <li>{props.sex}</li>
+            </ul>
+            )
+        }*/
+    //1. 定义组件（对象继承的方式）
+    class Person extends React.Component {
+
+        render() {
+            return (
+                <ul>
+                    <li>{this.props.name}</li>
+                    <li>{this.props.age}</li>
+                    <li>{this.props.sex}</li>
+                </ul>
+            )
+        }
+    }
+
+    // 为组件标签设置props属性对象的键的数据格式和是否必须做出限制
+    Person.propTypes = {
+        name: PropTypes.string.isRequired,
+        age: PropTypes.number.isRequired,
+        sex: PropTypes.string
+    }
+    // 为组件标签的props对象设置默认的键值
+    Person.defaultProps = {
+        name: '老张',
+        age: 19
+    }
+
+    const p1 = {
+        name: 'cris',
+        age: 12,
+        sex: '男'
+    }
+    const p2 = {
+        sex: '女'
+    }
+
+    /*...符号的作用
+    * 1.打包： function fn(...as) {} fn(1,2,3)     将1,2,3打包成数组as
+    * 2.解包：const arr1 = [1,2,3] const arr2 = [4, ...arr1, 6]  将arr1解包成一个个参数放入到arr2中
+    * */
+    //2. 渲染组件
+    //ReactDOM.render(<Person name={p1.name} age={p1.age} sex={p1.sex}/>, document.getElementById("test"))
+    // es6 的语法糖（解包和装包符号  ...）通过{...p1}的格式将p1这个对象的键值对封装到Person这个自定义标签的props属性对象中
+    // 关于语法糖：让程序员吃起来很甜的语法（简洁）；但是理解起来确实有点抽象；为了代码整洁，极简而定义的语法仁者见仁，智者见智（个人柑橘很厉害）
+    ReactDOM.render(<Person {...p1}/>, document.getElementById("test"))
+    ReactDOM.render(<Person {...p2}/>, document.getElementById("test2"))
+
+
+</script>
+</body>
+</html>
