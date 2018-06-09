@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test refs</title>
+</head>
+<body>
+
+<div id="test"></div>
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+
+<!--实战案例：
+    1. 自定义组件，点击按钮，输入第一个文本框中的已输入文本信息
+    2. 当第二个文本框失去焦点的时候，提示这个文本框已输入的文本信息
+-->
+<script type="text/babel">
+    class MyComponent extends React.Component {
+
+        constructor(props) {
+            super(props)
+            this.showInput = this.showInput.bind(this)
+            this.handleBlur = this.handleBlur.bind(this)
+        }
+
+        showInput() {
+            // 第一种写法：官方不推荐（虽然很简洁）
+            const input = this.refs.content
+            alert(input.value)
+            //第二种写法：使用箭头函数
+            alert(this.input.value)
+        }
+
+        handleBlur(event) {
+            alert(event.target.value)
+        }
+
+        render() {
+            return (
+                <div>
+                    {/*第一种写法：官方不推荐（虽然很简洁）*/}
+                    <input type="text" ref="content"/>&nbsp;&nbsp;
+                    {/*第二种写法：使用箭头函数，注意在render方法里面的注释很怪异*/}
+                    <input type="text" ref={input => this.input = input}/>&nbsp;&nbsp;
+                    <button onClick={this.showInput}>点击提示文本信息</button>
+                    &nbsp;&nbsp;
+
+                    <input type="text" placeholder="失去焦点提示文本信息" onBlur={this.handleBlur}/>
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(<MyComponent/>, document.getElementById("test"))
+</script>
+</body>
+</html>

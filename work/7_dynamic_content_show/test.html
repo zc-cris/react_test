@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<div id="test"></div>
+
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+
+<script type="text/babel">
+
+    class App extends React.Component {
+
+        constructor(props) {
+            super(props)
+            this.state = {
+                /*js中的数组创建方式*/
+                toDoList: ['吃饭', '睡觉', '逛街']
+            }
+            // 自定义的方法需要修改this的指向
+            this.addToDoList = this.addToDoList.bind(this)
+        }
+
+        /*父组件定义的state属性对象更新方法*/
+        addToDoList(todo) {
+            const {toDoList} = this.state
+            {/*将新添加的数据放入数组的第一个位置，记住：js中的数组的长度是可变的*/
+            }
+            toDoList.unshift(todo)
+            {/*一定要使用setSate方法更新*/
+            }
+            this.setState({toDoList})
+        }
+
+        render() {
+            {/*将重复的代码抽取出来*/
+            }
+            const {toDoList} = this.state
+            return (
+                <div>
+                    <h1>动态显示列表内容</h1>
+                    {/*不仅可以将父组件的state属性对象的属性传递给子组件，函数同理*/}
+                    <Content count={toDoList.length} addToDoList={this.addToDoList}/>
+                    {/*将初始化数据传递给子组件的props属性对象*/}
+                    <List toDoList={toDoList}/>
+                </div>
+            )
+        }
+    }
+
+    class Content extends React.Component {
+
+        constructor(props) {
+            super(props)
+            this.addToDoList = this.addToDoList.bind(this)
+        }
+
+        addToDoList() {
+            //1. 读取输入的数据
+            const value = this.inputToDo.value.trim()
+            //2. 检查数据的合法性
+            if (!value) {
+                alert("数据不能为空")
+                return
+            }
+            //3. 调用父组件的函数进行数据的添加
+            this.props.addToDoList(value)
+            // 4. 清除用户输入数据
+            this.inputToDo.value = ''
+        }
+
+        render() {
+            return (
+                <div>
+                    {/*使用箭头函数将当前input标签赋值给组件的属性*/}
+                    <input type="text" ref={(input) => (this.inputToDo = input)}/>
+                    {/*自定义的函数绑定监听事件*/}
+                    <button onClick={this.addToDoList}>请点击以显示您添加的列表，add #{this.props.count + 1}</button>
+                </div>
+            )
+        }
+
+    }
+
+    Content.propTypes = {
+        count: PropTypes.number.isRequired,
+        addToDoList: PropTypes.func.isRequired
+    }
+
+    class List extends React.Component {
+
+        render() {
+            {/*根据props属性对象的key进行结构赋值*/
+            }
+            const {toDoList} = this.props
+            return (
+                <div>
+                    {/*js代码在React中一定要用{}包裹，操作数组中的数据一般都需要使用箭头函数*/}
+                    {
+                        toDoList.map((todo, index) => <li key={index}>{todo}</li>)
+                    }
+                    <ul>
+                    </ul>
+                </div>
+
+            )
+        }
+    }
+
+    /*子组件需要对从外界传入的数据做出限制*/
+    List.propTypes = {
+        toDoList: PropTypes.array.isRequired
+    }
+
+    // 渲染组件标签
+    ReactDOM.render(<App/>, document.getElementById("test"))
+</script>
+</body>
+</html>
