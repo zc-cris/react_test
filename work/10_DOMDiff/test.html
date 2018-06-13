@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<div id="test"></div>
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<script type="text/babel">
+    class MyComponent extends React.Component {
+
+        constructor(props) {
+            super(props)
+            this.state = {
+                date: new Date()
+            }
+        }
+
+        componentDidMount() {
+            // 箭头函数替代普通的回调函数，非常方便的将函数内的this指向当前对象
+            setInterval(() => {
+                /*let {date} = this.state
+                date = new Date()
+                this.setState({date})*/
+                this.setState({
+                    date: new Date()
+                })
+            }, 1000)
+        }
+
+        render() {
+            return (
+                <div>
+                    <h3>请输入你的名字</h3>
+                    <input type="test" placeholder="输入内容不会影响其他部分"/>
+                    <span>
+                        现在当地时间是：{this.state.date.toLocaleTimeString()}
+                    </span>
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(<MyComponent/>, document.getElementById("test"))
+</script>
+</body>
+</html>
