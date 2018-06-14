@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<div id="test"></div>
+
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+
+<script type="text/babel">
+
+    /*组件初始化后通过ajax获取远程数据，在render方法中进行数据（数据类型）的渲染展示*/
+    class MyComponent extends React.Component {
+
+        constructor(props) {
+            super(props)
+            this.state = {
+                loading: true,
+                error: null,
+                data: null
+            }
+        }
+
+        componentDidMount() {
+            const url = 'https://os.alipayobjects.com/rmsportal/nnUJCKmLCyQHCex.json'
+            $.getJSON(
+                url
+            ).done(
+                value => this.setState({
+                    loading: false,
+                    data: value
+                })
+            ).fail(
+                (jqXHR, textStatus) => this.setState({
+                    loding: false,
+                    error: jqXHR.status
+                })
+            )
+        }
+
+        render() {
+            if (this.state.loading) {
+                return <h2>loading...;</h2>
+            } else if (this.state.error !== null) {
+                return <h2>Error: {this.state.error}</h2>
+            } else {
+                // console.log(this.state.data)
+                const {items} = this.state.data
+                return <ul>
+                    {items.map((item, index) => <li key={index}>{item.name}</li>)}
+                </ul>
+            }
+        }
+    }
+
+
+    ReactDOM.render(<MyComponent/>, document.getElementById("test"))
+</script>
+
+</body>
+</html>

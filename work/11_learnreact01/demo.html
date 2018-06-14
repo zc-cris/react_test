@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<div id="test"></div>
+
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+
+
+<script type="text/babel">
+
+    /*点击文字，显示不同的内容，并且文字的颜色和内容由外部传入到自定义组件的props属性里去*/
+    class MyComponenet extends React.Component {
+
+        constructor(props) {
+            super(props)
+            this.state = {
+                text: 'cris',
+                isClick: false
+            }
+            // this.handleClick = this.handleClick.bind(this)
+        }
+
+        /*绑定点击事件*/
+        handleClick() {
+            let {isClick} = this.state
+            this.setState({
+                isClick: !isClick,
+                text: isClick ? 'cris' : new Date().toLocaleDateString()
+            })
+        }
+
+        render() {
+            return (
+                <h1 onClick={this.handleClick.bind(this)} style={{color: this.props.color}}>hello
+                    react!&nbsp;&nbsp;{this.props.message},{this.state.text}</h1>
+            )
+        }
+    }
+
+    ReactDOM.render(<MyComponenet color="red" message='你好'/>, document.getElementById("test"))
+
+</script>
+</body>
+</html>
