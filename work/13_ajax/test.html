@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<div id="test"></div>
+<script type="text/javascript" src="../js/react.development.js"></script>
+<script type="text/javascript" src="../js/react-dom.development.js"></script>
+<script type="text/javascript" src="../js/prop-types.js"></script>
+<!--方便测试引入 cdn -->
+<script src="https://cdn.bootcss.com/axios/0.17.1/axios.js"></script>
+<script type="text/javascript" src="../js/babel.min.js"></script>
+<script type="text/babel">
+    /*
+    * 需求：根据指定的关键字在 github 上搜索匹配的最受关注的库，显示库名，以超链接的形式展现，点击即可跳转到这个库的 github 首页去
+    *       测试接口：http://api.github.com/search/repositories?q=rea&sort=stars
+    */
+    class TestAxiosComponent extends React.Component {
+
+        /*将ajax请求返回的数据放入到组件的state属性对象中*/
+        state = {
+            repoName: '',
+            repoUrl: ''
+        }
+
+        /*异步发送ajax 请求一般都放在这个生命周期方法里面*/
+        componentDidMount() {
+            const url = 'http://api.github.com/search/repositories?q=rea&sort=stars'
+            // 使用 axios 协助发送异步的 ajax 请求
+            axios.get(url)
+            // .post(url, {})       // 这是post 请求
+                .then(response => {
+                    const result = response.data
+                    // console.log(response)
+                    // 获取到远程返回数据的指定值(第一个仓库的name 和 html地址)
+                    const {html_url, name} = result.items[0]
+                    //然后更新到我们组件的state 属性对象中去
+                    this.setState({
+                        repoName: name,
+                        repoUrl: html_url
+                    })
+                })
+        }
+
+        render() {
+            const {repoName, repoUrl} = this.state
+            //如果没有通过ajax 请求异步获取到值
+            if (!repoName) {
+                return <h2>Loading...</h2>
+            } else {
+                // 如果获取到值了
+                return <h2>The most start repository is <a href={repoUrl}>{repoName}</a></h2>
+            }
+        }
+    }
+
+    ReactDOM.render(<TestAxiosComponent/>, document.getElementById("test"))
+
+
+</script>
+</body>
+</html>
