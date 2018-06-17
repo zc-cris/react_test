@@ -28,6 +28,7 @@
         /*异步发送ajax 请求一般都放在这个生命周期方法里面*/
         componentDidMount() {
             const url = 'http://api.github.com/search/repositories?q=rea&sort=stars'
+            // const url = 'http://api.github.com/search2/repositories?q=rea&sort=stars'
             // 使用 axios 协助发送异步的 ajax 请求
             axios.get(url)
             // .post(url, {})       // 这是post 请求
@@ -42,6 +43,25 @@
                         repoUrl: html_url
                     })
                 })
+                .catch(error => {               // 可以使用catch 方法来捕获服务器传来的异常信息
+                    alert(error.message)
+                })
+
+
+            // 第二种使用fetch 方式来发送ajax 请求
+            /*fetch(url)
+                .then(response => {
+                    return response.json()
+                })
+                .then(data => {
+                    // 获取到远程返回数据的指定值(第一个仓库的name 和 html地址)
+                    const {html_url, name} = data.items[0]
+                    //然后更新到我们组件的state 属性对象中去
+                    this.setState({
+                        repoName: name,
+                        repoUrl: html_url
+                    })
+                })*/
         }
 
         render() {
